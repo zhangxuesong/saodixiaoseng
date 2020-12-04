@@ -1,7 +1,7 @@
 baseURL = "https://zhangxuesong.github.io"
 languageCode = "en"
 defaultContentLanguage = "zh-hans"
-title = "Joseph"
+title = "扫地小僧"
 theme = "hermit"
 # enableGitInfo = true
 pygmentsCodefences  = true

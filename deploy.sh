@@ -8,4 +8,4 @@ cd ../zhangxuesong.github.io/
 
 git add * && git commit -m 'new article' && git push
 
-cd ../joseph/
+cd ../saodixiaoseng/
