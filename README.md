@@ -1,16 +1,6 @@
-# polarisxu的博客
+# Joseph的博客
 
-北京大学毕业；码农，创业者；Go语言中文网站长；著有《Go语言编程之旅》；爱 Go，也是 PHPer，还做过 Java；聊技术、聊职场、聊创业~
-
-## 在线阅读
-
-- https://polarisxu.studygolang.com/
-
-## 我的公众号
-
-polarisxu
-
-![](static/polarisxu.png)
+多年编码工具人
 
 ## License
 
