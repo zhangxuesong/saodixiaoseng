@@ -1,5 +1,5 @@
 ---
-title: "Go 语言中的类型断言"
+title: "Go 语言中的类型断言那些事儿"
 date: 2020-12-09T16:34:11+08:00
 toc: true
 isCJKLanguage: true
