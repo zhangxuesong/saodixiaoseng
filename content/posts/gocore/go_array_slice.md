@@ -5,6 +5,8 @@ toc: true
 isCJKLanguage: true
 tags: 
   - Go
+  - array
+  - slice
 ---
 
 ## `Go` 语言的数组（array）类型和切片（slice）类型
