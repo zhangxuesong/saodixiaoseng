@@ -5,7 +5,6 @@ toc: true
 isCJKLanguage: true
 tags: 
   - Go
-  - channel
 ---
 
 ## 单向通道

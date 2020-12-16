@@ -5,7 +5,6 @@ toc: true
 isCJKLanguage: true
 tags: 
   - Go
-  - map
 ---
 
 ## `Go` 语言的字典（`map`）类型
