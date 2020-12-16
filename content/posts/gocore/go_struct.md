@@ -24,13 +24,13 @@ tags:
 ```go
 // AnimalCategory 代表动物分类学中的基本分类法。
 type AnimalCategory struct {
-  kingdom string // 界。
-  phylum string // 门。
-  class  string // 纲。
-  order  string // 目。
-  family string // 科。
-  genus  string // 属。
-  species string // 种。
+	kingdom string // 界。
+	phylum  string // 门。
+	class   string // 纲。
+	order   string // 目。
+	family  string // 科。
+	genus   string // 属。
+	species string // 种。
 }
 
 func (ac AnimalCategory) String() string {
@@ -61,4 +61,37 @@ fmt.Printf("The animal category: %s\n", category)
 >
 > 一个数据类型关联的所有方法，共同组成了该类型的方法集合。同一个方法集合中的方法不能出现重名。如果它们所属的数据类型是结构体，那面它们的名称和该类型中的任何字段也不能重名。
 >
-> 结构体的字段是它的一个属性或者一项数据，隶属它的方法是附加在其数据上的一项操作或者能力。将属性及其能力封装在一起是面向对象
+> 结构体的字段是它的一个属性或者一项数据，隶属它的方法是附加在其数据上的一项操作或者能力。将属性及其能力封装在一起是面向对象的一个主要原则。
+>
+> `Go` 语言摄取了面向对象编程中的很多优秀特性，同时也推荐这种封装的做法。从这方面看，`Go` 语言是支持面向对象编程的，但它选择摒弃了一些在实际运用过程中容易引起程序开发者困惑的特性和规则。
+
+## 结构体类型的嵌套
+
+```go
+type Animal struct {
+	scientificName string // 学名。
+	AnimalCategory        // 动物基本分类。
+}
+```
+
+`Go` 语言规范规定，如果一个字段的声明中只有字段类型名而没有字段名称，那么它就是一个嵌入字段，也被称为匿名字段。可以通过此类型变量名跟 `.`，再跟嵌入字段类型的方式引用到该字段，也就是说，嵌入字段的类型既是类型也是名称。
+
+```go
+func (a Animal) Category() string {
+	return a.AnimalCategory.String()
+}
+```
+
+在某个代表变量的标识符右边加 `.`，再加上字段名或方法名的表达式被称为选择表达式，它用来表示选择了该变量的某个字段或方法。
+
+嵌入字段的方法集合会被无条件的合并进被嵌入类型的方法集合中：
+
+```go
+animal := Animal{
+    scientificName: "American Shorthair",
+    AnimalCategory: category,
+}
+fmt.Printf("The animal: %s\n", animal)
+```
+
+这里并没有给 `Animal` 编写 `String` 方法，但是是没问题的，嵌入字段 `AnimalCategory` 的 `String` 方法会被当做 `animal` 的方法调用。
