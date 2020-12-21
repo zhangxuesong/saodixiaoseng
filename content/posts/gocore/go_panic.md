@@ -45,4 +45,69 @@ func main() {
 
 某个函数中的某行代码有意或无意的引发了一个 `panic`。这时，初始的 `panic` 详情会被建立起来，并且该程序的控制权会从此行代码转移至调用其所属函数的那行代码上，也就是调用栈的上一级。 
 
-这也意味着，此行代码所属的函数的执行随即终止。紧接着，控制权并不会在此有片刻停留，它又会立即转移至再上一级的调用代码处。控制权如此一级一级的沿着调用栈的反方向传播至顶端
+这也意味着，此行代码所属的函数的执行随即终止。紧接着，控制权并不会在此有片刻停留，它又会立即转移至再上一级的调用代码处。控制权如此一级一级的沿着调用栈的反方向传播至顶端，也就是我们编写的最外层函数那里。
+
+这里的最外层函数指的是 `go` 函数，对于主 `goroutine` 来说就是 `main` 函数。但是控制权也不会停留在那里，而是被 `Go` 运行时系统回收。
+
+随后，程序崩溃并终止运行，承载程序这次运行的进程也会随之死亡和消失。与此同时，在这个控制传播过程中，`panic` 详情会主键的积累和完善，并会在程序终止之前被打印出来。
+
+`panic` 可能是我们在无意间引发的，如前文所属的索引越界。这类 `panic` 是真正的、在我们意料之外的程序异常。除此之外，我们还可以有意的引发 `panic`。
+
+`Go` 语言内建函数 `panic` 是专门用于引发 `panic` 的。该函数使程序开发者可以在程序运行期间报告异常。注意，这与函数返回错误值的意义是完全不同的。当我们的函数返回一个非 `nil` 的错误值时，函数的调用放有权选择不处理，并且不处理的结果往往是不致命的。
+
+这里的不致命是说不至于使程序无法提供任何功能或者直接崩溃并终止运行。
+
+当一个 `panic` 发生时，如果我们不加任何保护措施，那么导致的后果可能是程序崩溃，这显然是致命的。
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	fmt.Println("Enter function main.")
+	caller1()
+	fmt.Println("Exit function main.")
+}
+
+func caller1() {
+	fmt.Println("Enter function caller1.")
+	caller2()
+	fmt.Println("Exit function caller1.")
+}
+
+func caller2() {
+	fmt.Println("Enter function caller2.")
+	s1 := []int{0, 1, 2, 3, 4}
+	e5 := s1[5]
+	_ = e5
+	fmt.Println("Exit function caller2.")
+}
+```
+
+提示：`panic` 详情会在控制权传播的过程中，被主键的积累和完善，并且，控制权会一级一级的沿着调用栈反方向传播至顶端。
+
+因此，在针对某个 `goroutine` 的代码执行信息中，调用栈底层的信息会先出现，然后是上一级的调用信息，以此类推，最后才是此调用栈顶端的信息。
+
+```go
+Enter function main.
+Enter function caller1.
+Enter function caller2.
+panic: runtime error: index out of range [5] with length 5
+
+goroutine 1 [running]:
+main.caller2()
+        /Users/zhangxuesong/gowork/src/gocore/gopanic/main1.go:22 +0x85
+main.caller1()
+        /Users/zhangxuesong/gowork/src/gocore/gopanic/main1.go:15 +0x7e
+main.main()
+        /Users/zhangxuesong/gowork/src/gocore/gopanic/main1.go:9 +0x7e
+exit status 2
+```
+
+![](./image/606ff433a6b58510f215e57792822bd7.png)
+
+深入地了解此过程，以及正确地解读 `panic` 详情应该是我们的必备技能，这在调试 `Go` 程序或者为 `Go` 程序排查错误的时候非常重要。
+
